@@ -1,21 +1,12 @@
 from assembler import Assembler
 from lmc import Lmc
 
+filename = 'lmc/exec.lmc'
+
 assembler = Assembler()
+memory = assembler.compile(filename)
 
-lines = assembler.get_code_lines('lmc/quine.lmc')
-print('Lines: ', lines)
-
-labels, processed_lines = assembler.get_labels(lines)
-print('Labels: \n', labels)
-print('Processed lines: \n', processed_lines)
-
-
-memory = assembler.parse_machine_code(labels, processed_lines)
-print('Memory: ', memory)
-
-
-lmc = Lmc(memory, [2, 3, 99])
+lmc = Lmc(memory, [901, 902, 705, 600, 0, 4, 5, 6, 7, 8, 9, 0])
 
 lmc.run('standard')
 

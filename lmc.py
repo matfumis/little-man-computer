@@ -1,8 +1,10 @@
 # Matteo Alessandro Fumis (IN2000249)
 
 from queue import Queue
+from exceptions import MemoryExceededException, EmptyQueueException, IllegalInstructionException
 
 class Lmc:
+
   def __init__(self, binary, input_values=None):
     self.memory = [0] * 100 
     self.accumulator = 0  
@@ -13,7 +15,7 @@ class Lmc:
     self.halted = False  
 
     if len(binary) > 100:
-      raise Exception('Not enough memory for selected program')
+      raise MemoryExceededException(len(binary), len(self.memory))
     else:
       for i in range(len(binary)):
         self.memory[i] = binary[i]
@@ -30,14 +32,14 @@ class Lmc:
         case 'steps':
           while self.halted is False:
               opcode, operand = self.__execute_instruction()
-              print(f"Performed operation = {opcode}, operand {operand}")
+              print(self)
               input("Press ENTER to continue execution")
       print('Execution ended')
   
 
   def __execute_instruction(self):
     instruction = self.memory[self.program_counter]
-    self.program_counter = (self.program_counter + 1) % 100
+    self.program_counter = (self.program_counter + 1) % 1000
 
     opcode = instruction // 100
     operand = instruction % 100
@@ -49,7 +51,7 @@ class Lmc:
 
       case 1: 
         res = self.accumulator + self.memory[operand] 
-        if(res >= 1000):
+        if(res > 999):
           self.flag = True
         else:
           self.flag = False
@@ -83,20 +85,32 @@ class Lmc:
       case 9: 
         match operand:
           case 1: 
-            if self.input_queue.empty():
-                print("Input queue is empty - halting program")
-                self.halted = True
-                self.accumulator = 0
-            else:
-                self.accumulator = self.input_queue.remove() 
+            try:
+              self.accumulator = self.input_queue.remove() 
+            except EmptyQueueException():
+              self.halted = True
+              self.accumulator = 0 
           case 2: 
             self.output_queue.add(self.accumulator)
           case _:
             self.halted = True
-            raise Exception(f"Invalid I/O instruction: {instruction}")
+            raise IllegalInstructionException(instruction)
 
       case _:  
         self.halted = True
-        raise Exception(f"Invalid instruction: {instruction}")
+        raise IllegalInstructionException(instruction)
 
     return opcode, operand    
+
+
+  def __str__(self):
+    status = '-------------------------\n'
+    status += "LMC Status:\n"
+    status += f"  Accumulator: {self.accumulator}\n"
+    status += f"  Program Counter: {self.program_counter}\n"
+    status += f"  Flag: {self.flag}\n"
+    status += f"  Halted: {self.halted}\n"
+    status += f"  Input Queue: {self.input_queue}\n"
+    status += f"  Output Queue: {self.output_queue}\n"
+
+    return status

@@ -1,4 +1,5 @@
 class Assembler:
+ 
   def __init__(self):
       self.instructions = {
           'ADD': 1,  
@@ -14,7 +15,7 @@ class Assembler:
           'DAT': None 
       }
 
-  def compile(self, filename):
+  def assemble(self, filename):
     labels, lines = self.__preprocess_code(filename)
     memory = self.__parse_machine_code(lines, labels)
     return memory
@@ -86,7 +87,6 @@ class Assembler:
                 else:
                     memory[address] = 0
             else:
-
                 if len(tokens) == 1:
                     memory[address] = opcode
                 elif len(tokens) > 1:

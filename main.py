@@ -1,17 +1,61 @@
+import argparse
 from assembler import Assembler
 from lmc import Lmc
+from exceptions import (
+    MemoryExceededException,
+    EmptyQueueException,
+    IllegalInstructionException,
+    InvalidFileExtensionException,
+)
 
 
+def main():
+    parser = argparse.ArgumentParser(
+        description="LMC Simulator - Compile and execute LMC assembly programs"
+    )
+    parser.add_argument("filename", type=str, help="Path to the .lmc assembly file")
+    parser.add_argument(
+        "--mode",
+        choices=["standard", "steps"],
+        default="standard",
+        help="Execution mode: standard (continuous) or steps (interactive)",
+    )
+    parser.add_argument(
+        "--input",
+        type=int,
+        nargs="*",
+        help="Input values to be placed in the input queue",
+    )
 
-filename = 'lmc/exec.lmc'
+    args = parser.parse_args()
 
-assembler = Assembler()
-memory = assembler.assemble(filename)
+    try:
+        print(f"Assembling {args.filename}...")
+        assembler = Assembler()
+        machine_code = assembler.assemble(args.filename)
+        print("Assembly completed successfully.")
 
-lmc = Lmc(memory, [901, 902, 705, 600, 0, 4, 5, 6, 7, 8, 9, 0])
+        print("Initializing LMC machine...")
+        lmc = Lmc(machine_code, args.input)
 
-lmc.run('steps')
+        print(f"Executing in {args.mode} mode...\n")
+        lmc.run(args.mode)
 
-print(lmc.output_queue)
+        print(f"\nProgram output: {lmc.output_queue}\n")
+
+    except FileNotFoundError:
+        print(f"Error: File '{args.filename}' not found.")
+    except MemoryExceededException as e:
+        print(f"Error: {e}")
+    except IllegalInstructionException as e:
+        print(f"Error: {e}")
+    except EmptyQueueException as e:
+        print(f"Error: {e}")
+    except InvalidFileExtensionException as e:
+        print(f"Error: {e}")
+    except Exception as e:
+        print(f"Unexpected error: {e}")
 
 
+if __name__ == "__main__":
+    main()

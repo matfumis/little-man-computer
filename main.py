@@ -17,9 +17,9 @@ from exceptions import (
     - None (explicitly)
 
     The function:
-    1. Creates a parser to compile and execute a source file from command line.
+    1. Creates a parser to compile and execute a source file from command line
     2. Instantiates an assembler and by calling the assemble() function sets
-        the initial lmc memory states.
+        the initial lmc memory state
     3. Instantiates an lmc with the initial memory state and possible arguments 
         provided via command line
     4. Runs the program with the specified mode 

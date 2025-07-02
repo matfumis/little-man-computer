@@ -199,10 +199,7 @@ class Assembler:
 
                 if tokens[0] == "DAT":
                     if len(tokens) > 1:
-                        if tokens[1] in labels:
-                            operand = labels[tokens[1]]
-                        else:
-                            operand = int(tokens[1])
+                        operand = int(tokens[1])
                         memory[address] = operand
                     else:
                         memory[address] = 0

@@ -85,11 +85,8 @@ class Lmc:
         instruction = self.memory[self.program_counter]
         self.program_counter = self.program_counter + 1
 
-        if self.program_counter >= 100:
-            self.halted = True
-            raise IllegalInstructionException(
-                f"Program counter exceeded memory bounds: {self.program_counter}"
-            )
+        if self.program_counter > 99:
+            self.program_counter = 0
 
         """
         Integer division by 100 to get the first digit,

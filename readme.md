@@ -33,8 +33,8 @@ LMC has an input and an output queue
 
 ### Compiling and Running
 
-The program compiles and runs the `.lmc`in a single command. the format has
-to be the following
+The program compiles and runs the `.lmc` in a single command. The format has
+to be the following:
 
 `python3 <path-to-main.py> <path-to-lmc-source> --input <input-values> --mode <standard/steps>` 
 

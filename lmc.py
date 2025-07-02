@@ -12,9 +12,9 @@ class Lmc:
     """
     Constructor function
 
-    Prameters:
-    - Machine code produced by the assembler, it is an array of integers
-    - Optional input values, it is a list of integers
+    Parameters:
+    - Machine code produced by the assembler
+    - Optional input values
 
     The function:
     1. Instantiates fields that characterize the lmc
@@ -25,9 +25,9 @@ class Lmc:
         self.memory = [0] * 100
         self.accumulator = 0
         self.program_counter = 0
-        self.flag = False
         self.input_queue = Queue()
         self.output_queue = Queue()
+        self.flag = False
         self.halted = False
 
         if len(machine_code) > 100:
@@ -43,13 +43,13 @@ class Lmc:
     """
     Function run()
 
-    Prameters:
+    Parameters:
     - A mode of execution, it is a string. 
 
     The function:
     1. Checks the selected run mode
     2. Executes the program
-        - If "standard", exutes all the instructions until the halt flag is True
+        - If "standard", executes all the instructions until the halt flag is True
         - If "steps", executes a single instruction and waits for the user input (ENTER) for 
         executing the next
     """
@@ -92,18 +92,16 @@ class Lmc:
             )
 
         """
-        binary mask to get the first digit,
-        then modulus to get the last two digits
+        Integer division by 100 to get the first digit,
+        modulus to get the last two digits
         """
         opcode = instruction // 100
         operand = instruction % 100
 
-        # follows the implementation of various instructions
+        # follows the implementation of the instructions
         match opcode:
             case 0:
                 self.halted = True
-                return opcode, operand
-
             case 1:
                 res = self.accumulator + self.memory[operand]
                 if res > 999:
@@ -157,7 +155,7 @@ class Lmc:
                 raise IllegalInstructionException(instruction)
 
 
-    # __str()__ dunder method to represent the state of an lmc instance as string    
+    #__str()__ dunder method to represent the state of a lmc instance as string
     def __str__(self):
         return (
             f"-------------------------\n"

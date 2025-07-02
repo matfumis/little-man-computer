@@ -1,3 +1,5 @@
+# Matteo Alessandro Fumis (IN2000249)
+
 import argparse
 from assembler import Assembler
 from lmc import Lmc
@@ -8,6 +10,20 @@ from exceptions import (
     InvalidFileExtensionException,
 )
 
+"""
+    Function main()
+
+    Parameters:
+    - None (explicitly)
+
+    The function:
+    1. Creates a parser to compile and execute a source file from command line.
+    2. Instantiates an assembler and by calling the assemble() function sets
+        the initial lmc memory states.
+    3. Instantiates an lmc with the initial memory state and possible arguments 
+        provided via command line
+    4. Runs the program with the specified mode 
+    """
 
 def main():
     parser = argparse.ArgumentParser(
@@ -32,11 +48,11 @@ def main():
     try:
         print(f"Assembling {args.filename}...")
         assembler = Assembler()
-        machine_code = assembler.assemble(args.filename)
+        memory = assembler.assemble(args.filename)
         print("Assembly completed successfully.")
 
         print("Initializing LMC machine...")
-        lmc = Lmc(machine_code, args.input)
+        lmc = Lmc(memory, args.input)
 
         print(f"Executing in {args.mode} mode...\n")
         lmc.run(args.mode)
@@ -54,7 +70,7 @@ def main():
     except InvalidFileExtensionException as e:
         print(f"Error: {e}")
     except Exception as e:
-        print(f"Unexpected error: {e}")
+        print(f"Unexpected Error: {e}")
 
 
 if __name__ == "__main__":

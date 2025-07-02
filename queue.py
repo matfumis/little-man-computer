@@ -1,3 +1,5 @@
+# Matteo Alessandro Fumis (IN2000249)
+
 from exceptions import EmptyQueueException
 
 class Queue:
